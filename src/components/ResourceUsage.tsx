@@ -1,7 +1,7 @@
 
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CpuIcon, Memory, HardDrive, Network } from "lucide-react";
+import { CpuIcon, MemoryStick, HardDrive, Network } from "lucide-react";
 import { cn } from '@/lib/utils';
 
 interface ResourceData {
@@ -25,7 +25,7 @@ export const ResourceUsage = () => {
       name: "Memory",
       value: 68,
       limit: 100,
-      icon: Memory,
+      icon: MemoryStick,
       color: "hypergreen"
     },
     {

@@ -1,5 +1,4 @@
-
-import { CpuIcon, HardDrive, Memory, PlayCircle, PowerOff, PauseCircle } from "lucide-react";
+import { CpuIcon, HardDrive, MemoryStick, PlayCircle, PowerOff, PauseCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { StatusBadge } from "@/components/StatusBadge";
@@ -67,7 +66,7 @@ export const VirtualMachineCard = ({
           <div className="space-y-1">
             <div className="flex justify-between text-sm">
               <div className="flex items-center gap-1.5 text-muted-foreground">
-                <Memory className="h-3.5 w-3.5" />
+                <MemoryStick className="h-3.5 w-3.5" />
                 <span>RAM</span>
               </div>
               <span className="font-medium">{ram.used} GB / {ram.allocated} GB</span>

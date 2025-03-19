@@ -1,4 +1,3 @@
-
 import { Sidebar } from "@/components/Sidebar";
 import { Header } from "@/components/Header";
 import { HardDrive, Plus, Database, RefreshCw, Server } from "lucide-react";
