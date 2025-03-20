@@ -13,6 +13,8 @@ import Networking from "./pages/Networking";
 import Cluster from "./pages/Cluster";
 import Backup from "./pages/Backup";
 import Gallery from "./pages/Gallery";
+import HPC from "./pages/HPC";
+import HCI from "./pages/HCI";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -31,6 +33,8 @@ const App = () => (
           <Route path="/cluster" element={<Cluster />} />
           <Route path="/backup" element={<Backup />} />
           <Route path="/gallery" element={<Gallery />} />
+          <Route path="/hpc" element={<HPC />} />
+          <Route path="/hci" element={<HCI />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

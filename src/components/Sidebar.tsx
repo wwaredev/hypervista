@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
@@ -15,7 +14,8 @@ import {
   Monitor,
   ChevronLeft,
   ChevronRight,
-  GalleryHorizontal,
+  Cpu,
+  GitBranch,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
@@ -38,7 +38,9 @@ export const Sidebar = () => {
     { title: "Networking", icon: Network, href: "/networking" },
     { title: "Cluster", icon: Server, href: "/cluster", badge: "3" },
     { title: "Backup", icon: Umbrella, href: "/backup" },
-    { title: "Gallery", icon: GalleryHorizontal, href: "/gallery" },
+    { title: "Gallery", icon: Cloud, href: "/gallery" },
+    { title: "HPC", icon: Cpu, href: "/hpc" },
+    { title: "HCI", icon: GitBranch, href: "/hci" },
     { title: "Security", icon: Shield, href: "/security" },
   ];
 
