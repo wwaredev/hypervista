@@ -12,6 +12,7 @@ import Storage from "./pages/Storage";
 import Networking from "./pages/Networking";
 import Cluster from "./pages/Cluster";
 import Backup from "./pages/Backup";
+import Gallery from "./pages/Gallery";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -29,6 +30,7 @@ const App = () => (
           <Route path="/networking" element={<Networking />} />
           <Route path="/cluster" element={<Cluster />} />
           <Route path="/backup" element={<Backup />} />
+          <Route path="/gallery" element={<Gallery />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

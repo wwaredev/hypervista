@@ -15,6 +15,7 @@ import {
   Monitor,
   ChevronLeft,
   ChevronRight,
+  GalleryHorizontal,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
@@ -37,7 +38,7 @@ export const Sidebar = () => {
     { title: "Networking", icon: Network, href: "/networking" },
     { title: "Cluster", icon: Server, href: "/cluster", badge: "3" },
     { title: "Backup", icon: Umbrella, href: "/backup" },
-    { title: "Templates", icon: Cloud, href: "/templates" },
+    { title: "Gallery", icon: GalleryHorizontal, href: "/gallery" },
     { title: "Security", icon: Shield, href: "/security" },
   ];
 
@@ -52,11 +53,11 @@ export const Sidebar = () => {
   return (
     <aside
       className={cn(
-        "bg-sidebar text-sidebar-foreground border-r border-sidebar-border h-[calc(100vh-4rem)] flex flex-col transition-all duration-300",
+        "bg-sidebar text-sidebar-foreground border-r border-sidebar-border h-screen flex flex-col transition-all duration-300 sticky top-0 left-0",
         collapsed ? "w-[4.5rem]" : "w-64"
       )}
     >
-      <div className="flex-1 py-4">
+      <div className="flex-1 py-4 overflow-y-auto">
         <nav className="space-y-1 px-3">
           {links.map((link) => (
             <NavItem 

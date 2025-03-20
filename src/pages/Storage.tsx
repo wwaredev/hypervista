@@ -1,73 +1,98 @@
+
 import { Sidebar } from "@/components/Sidebar";
 import { Header } from "@/components/Header";
 import { HardDrive, Plus, Database, RefreshCw, Server } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Badge } from "@/components/ui/badge";
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip as RechartsTooltip } from "recharts";
 
 const Storage = () => {
-  // Mock storage data
-  const storageTypes = [
-    { name: "SSD", value: 2560, color: "#0d93e7" },
-    { name: "HDD", value: 8192, color: "#65a3c9" },
-    { name: "NVMe", value: 1024, color: "#29cc78" },
-  ];
-  
-  const datastores = [
-    { 
-      id: "ds-1", 
-      name: "datastore1", 
-      type: "SSD", 
-      total: 1024, 
-      used: 645, 
+  // Mock storage pool data
+  const storagePools = [
+    {
+      id: "pool-1",
+      name: "Main Storage",
+      type: "ZFS",
       status: "healthy",
-      host: "host-1.example.com",
+      total: 2048, // GB
+      used: 820, // GB
+      devices: 8,
     },
-    { 
-      id: "ds-2", 
-      name: "datastore2", 
-      type: "HDD", 
-      total: 4096, 
-      used: 2150, 
+    {
+      id: "pool-2",
+      name: "SSD Cache",
+      type: "LVM",
       status: "healthy",
-      host: "host-1.example.com",
+      total: 512, // GB
+      used: 128, // GB
+      devices: 4,
     },
-    { 
-      id: "ds-3", 
-      name: "datastore3", 
-      type: "SSD", 
-      total: 1536, 
-      used: 980, 
+    {
+      id: "pool-3",
+      name: "Backup Storage",
+      type: "ZFS",
       status: "warning",
-      host: "host-2.example.com",
-    },
-    { 
-      id: "ds-4", 
-      name: "datastore4", 
-      type: "NVMe", 
-      total: 1024, 
-      used: 210, 
-      status: "healthy",
-      host: "host-3.example.com",
-    },
-    { 
-      id: "ds-5", 
-      name: "datastore5", 
-      type: "HDD", 
-      total: 4096, 
-      used: 3800, 
-      status: "critical",
-      host: "host-2.example.com",
+      total: 4096, // GB
+      used: 3072, // GB
+      devices: 12,
     },
   ];
   
-  // Calculate totals
-  const totalStorage = storageTypes.reduce((sum, type) => sum + type.value, 0);
-  const usedStorage = datastores.reduce((sum, ds) => sum + ds.used, 0);
+  // Mock volume data
+  const volumes = [
+    {
+      id: "vol-1",
+      name: "VM Storage",
+      pool: "Main Storage",
+      size: 500, // GB
+      used: 350, // GB
+      type: "Thin",
+    },
+    {
+      id: "vol-2",
+      name: "Container Storage",
+      pool: "Main Storage",
+      size: 200, // GB
+      used: 120, // GB
+      type: "Thin",
+    },
+    {
+      id: "vol-3",
+      name: "ISO Images",
+      pool: "SSD Cache",
+      size: 100, // GB
+      used: 45, // GB
+      type: "Thick",
+    },
+    {
+      id: "vol-4",
+      name: "Backups",
+      pool: "Backup Storage",
+      size: 2000, // GB
+      used: 1800, // GB
+      type: "Thick",
+    },
+  ];
   
+  // Function to get status color
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case "healthy":
+        return "bg-hypergreen-500";
+      case "warning":
+        return "bg-amber-500";
+      case "critical":
+        return "bg-destructive";
+      default:
+        return "bg-muted";
+    }
+  };
+  
+  // Function to get usage percentage
+  const getUsagePercentage = (used: number, total: number) => {
+    return Math.round((used / total) * 100);
+  };
+
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <Header />
@@ -82,7 +107,7 @@ const Storage = () => {
                   Storage
                 </h1>
                 <p className="text-muted-foreground">
-                  Manage datastores and storage resources
+                  Manage storage pools and volumes
                 </p>
               </div>
               <div className="flex flex-wrap items-center gap-2">
@@ -96,176 +121,88 @@ const Storage = () => {
               </div>
             </div>
             
-            <Tabs defaultValue="overview" className="w-full space-y-6">
-              <TabsList>
-                <TabsTrigger value="overview">Overview</TabsTrigger>
-                <TabsTrigger value="datastores">Datastores</TabsTrigger>
-                <TabsTrigger value="volumes">Volumes</TabsTrigger>
-              </TabsList>
-              
-              <TabsContent value="overview" className="space-y-6">
-                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                  <Card>
-                    <CardHeader className="pb-2">
-                      <CardTitle>Total Storage</CardTitle>
-                      <CardDescription>Across all datastores</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="text-3xl font-bold mb-2">{(totalStorage / 1024).toFixed(1)} TB</div>
-                      <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3">
-                        <Database className="h-4 w-4" />
-                        <span>{datastores.length} datastores configured</span>
-                      </div>
-                      <div className="space-y-1">
-                        <div className="flex justify-between text-sm">
-                          <span>Used Storage</span>
-                          <span className="font-medium">{Math.round((usedStorage / totalStorage) * 100)}%</span>
+            <div className="space-y-6">
+              <div>
+                <h2 className="text-xl font-semibold mb-4">Storage Pools</h2>
+                <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                  {storagePools.map((pool) => (
+                    <Card key={pool.id}>
+                      <CardHeader className="pb-2">
+                        <div className="flex justify-between items-start">
+                          <CardTitle className="text-lg">{pool.name}</CardTitle>
+                          <div className={`px-2 py-1 rounded-full text-xs ${getStatusColor(pool.status)} text-white`}>
+                            {pool.status}
+                          </div>
                         </div>
-                        <Progress value={Math.round((usedStorage / totalStorage) * 100)} />
-                      </div>
-                    </CardContent>
-                  </Card>
-                  
-                  <Card>
-                    <CardHeader className="pb-2">
-                      <CardTitle>Storage Types</CardTitle>
-                      <CardDescription>Distribution by media type</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="h-48">
-                        <ResponsiveContainer width="100%" height="100%">
-                          <PieChart>
-                            <Pie
-                              data={storageTypes}
-                              cx="50%"
-                              cy="50%"
-                              innerRadius={60}
-                              outerRadius={80}
-                              paddingAngle={2}
-                              dataKey="value"
-                              label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                              labelLine={false}
-                            >
-                              {storageTypes.map((entry, index) => (
-                                <Cell key={`cell-${index}`} fill={entry.color} />
-                              ))}
-                            </Pie>
-                            <RechartsTooltip 
-                              formatter={(value) => `${(value / 1024).toFixed(2)} TB`}
-                            />
-                          </PieChart>
-                        </ResponsiveContainer>
-                      </div>
-                      <div className="flex justify-around mt-2">
-                        {storageTypes.map((type) => (
-                          <div key={type.name} className="text-center">
-                            <div className="text-sm font-medium">{type.name}</div>
-                            <div className="text-sm text-muted-foreground">
-                              {(type.value / 1024).toFixed(1)} TB
+                      </CardHeader>
+                      <CardContent>
+                        <div className="space-y-4">
+                          <div>
+                            <div className="flex justify-between mb-1 text-sm">
+                              <span className="text-muted-foreground">Usage</span>
+                              <span className="font-medium">{pool.used} GB / {pool.total} GB</span>
+                            </div>
+                            <Progress value={getUsagePercentage(pool.used, pool.total)} className="h-2" />
+                          </div>
+                          <div className="grid grid-cols-2 gap-2 text-sm">
+                            <div>
+                              <div className="text-muted-foreground">Type</div>
+                              <div>{pool.type}</div>
+                            </div>
+                            <div>
+                              <div className="text-muted-foreground">Devices</div>
+                              <div>{pool.devices}</div>
                             </div>
                           </div>
-                        ))}
-                      </div>
-                    </CardContent>
-                  </Card>
-                  
-                  <Card>
-                    <CardHeader className="pb-2">
-                      <CardTitle>Storage Health</CardTitle>
-                      <CardDescription>System status overview</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="space-y-4">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-2">
-                            <div className="h-3 w-3 rounded-full bg-hypergreen-500"></div>
-                            <span>Healthy</span>
-                          </div>
-                          <span>{datastores.filter(ds => ds.status === "healthy").length}</span>
                         </div>
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-2">
-                            <div className="h-3 w-3 rounded-full bg-amber-500"></div>
-                            <span>Warning</span>
-                          </div>
-                          <span>{datastores.filter(ds => ds.status === "warning").length}</span>
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-2">
-                            <div className="h-3 w-3 rounded-full bg-red-500"></div>
-                            <span>Critical</span>
-                          </div>
-                          <span>{datastores.filter(ds => ds.status === "critical").length}</span>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
+                      </CardContent>
+                      <CardFooter className="pt-0">
+                        <Button variant="ghost" size="sm" className="w-full">Manage</Button>
+                      </CardFooter>
+                    </Card>
+                  ))}
                 </div>
-              </TabsContent>
+              </div>
               
-              <TabsContent value="datastores">
-                <div className="rounded-md border">
-                  <div className="grid grid-cols-12 p-4 font-medium text-sm text-muted-foreground border-b">
-                    <div className="col-span-3">Datastore</div>
-                    <div className="col-span-2">Type</div>
-                    <div className="col-span-2">Capacity</div>
-                    <div className="col-span-2">Usage</div>
-                    <div className="col-span-2">Host</div>
-                    <div className="col-span-1">Status</div>
-                  </div>
-                  <div className="divide-y">
-                    {datastores.map((ds) => {
-                      const usagePercent = Math.round((ds.used / ds.total) * 100);
-                      return (
-                        <div key={ds.id} className="grid grid-cols-12 p-4 items-center hover:bg-muted/50 transition-colors">
-                          <div className="col-span-3 font-medium">{ds.name}</div>
-                          <div className="col-span-2">{ds.type}</div>
-                          <div className="col-span-2">{(ds.total / 1024).toFixed(1)} TB</div>
-                          <div className="col-span-2">
-                            <div className="flex flex-col gap-1">
-                              <div className="text-sm">{usagePercent}%</div>
-                              <Progress 
-                                value={usagePercent} 
-                                className={usagePercent > 85 ? "text-red-500" : ""} 
-                              />
+              <div>
+                <h2 className="text-xl font-semibold mb-4">Volumes</h2>
+                <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                  {volumes.map((volume) => (
+                    <Card key={volume.id}>
+                      <CardHeader className="pb-2">
+                        <CardTitle className="text-lg">{volume.name}</CardTitle>
+                        <p className="text-muted-foreground text-sm">Pool: {volume.pool}</p>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="space-y-4">
+                          <div>
+                            <div className="flex justify-between mb-1 text-sm">
+                              <span className="text-muted-foreground">Usage</span>
+                              <span className="font-medium">{volume.used} GB / {volume.size} GB</span>
+                            </div>
+                            <Progress value={getUsagePercentage(volume.used, volume.size)} className="h-2" />
+                          </div>
+                          <div className="grid grid-cols-2 gap-2 text-sm">
+                            <div>
+                              <div className="text-muted-foreground">Type</div>
+                              <div>{volume.type}</div>
+                            </div>
+                            <div>
+                              <div className="text-muted-foreground">Free</div>
+                              <div>{volume.size - volume.used} GB</div>
                             </div>
                           </div>
-                          <div className="col-span-2 text-sm">{ds.host}</div>
-                          <div className="col-span-1">
-                            <Badge className={
-                              ds.status === "healthy" ? "bg-hypergreen-100 text-hypergreen-800 hover:bg-hypergreen-100/80" :
-                              ds.status === "warning" ? "bg-amber-100 text-amber-800 hover:bg-amber-100/80" :
-                              "bg-red-100 text-red-800 hover:bg-red-100/80"
-                            }>
-                              {ds.status}
-                            </Badge>
-                          </div>
                         </div>
-                      );
-                    })}
-                  </div>
+                      </CardContent>
+                      <CardFooter className="pt-0 flex gap-2">
+                        <Button variant="ghost" size="sm" className="flex-1">Edit</Button>
+                        <Button variant="ghost" size="sm" className="flex-1">Delete</Button>
+                      </CardFooter>
+                    </Card>
+                  ))}
                 </div>
-              </TabsContent>
-              
-              <TabsContent value="volumes">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Storage Volumes</CardTitle>
-                    <CardDescription>
-                      Manage logical volumes and partitions
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="text-center py-8">
-                    <Server className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-                    <h3 className="text-lg font-medium">Volume Management</h3>
-                    <p className="text-muted-foreground max-w-md mx-auto mt-1 mb-4">
-                      Create and manage logical volumes across your datastores
-                    </p>
-                    <Button>Create Volume</Button>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-            </Tabs>
+              </div>
+            </div>
           </div>
         </main>
       </div>
