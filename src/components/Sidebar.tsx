@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
@@ -15,6 +16,8 @@ import {
   Monitor,
   Cpu,
   GitBranch,
+  GalleryHorizontal,
+  MapPin,
 } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
@@ -39,7 +42,9 @@ export const Sidebar = ({ collapsed }: SidebarProps) => {
     { title: "Networking", icon: Network, href: "/networking" },
     { title: "Cluster", icon: Server, href: "/cluster", badge: "3" },
     { title: "Backup", icon: Umbrella, href: "/backup" },
-    { title: "Gallery", icon: Cloud, href: "/gallery" },
+    { title: "DC Locations", icon: MapPin, href: "/locations" },
+    { title: "Cloud", icon: Cloud, href: "/cloud" },
+    { title: "Gallery", icon: GalleryHorizontal, href: "/gallery" },
     { title: "HPC", icon: Cpu, href: "/hpc" },
     { title: "HCI", icon: GitBranch, href: "/hci" },
     { title: "Security", icon: Shield, href: "/security" },
@@ -70,7 +75,7 @@ export const Sidebar = ({ collapsed }: SidebarProps) => {
           </nav>
         </div>
       
-        <div className="border-t border-sidebar-border py-4 px-3 mt-auto">
+        <div className="border-t border-sidebar-border py-4 px-3 mt-auto absolute bottom-0 left-0 w-full bg-sidebar">
           <nav className="space-y-1">
             {bottomLinks.map((link) => (
               <NavItem 
