@@ -15,9 +15,7 @@ import {
   Monitor,
   Cpu,
   GitBranch,
-  PanelLeft,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface SidebarLink {
@@ -27,9 +25,12 @@ interface SidebarLink {
   badge?: string;
 }
 
-export const Sidebar = () => {
+interface SidebarProps {
+  collapsed: boolean;
+}
+
+export const Sidebar = ({ collapsed }: SidebarProps) => {
   const location = useLocation();
-  const [collapsed, setCollapsed] = useState(false);
 
   const links: SidebarLink[] = [
     { title: "Dashboard", icon: BarChart2, href: "/" },
@@ -47,10 +48,6 @@ export const Sidebar = () => {
   const bottomLinks: SidebarLink[] = [
     { title: "Settings", icon: Settings, href: "/settings" },
   ];
-  
-  const toggleSidebar = () => {
-    setCollapsed(!collapsed);
-  };
 
   return (
     <aside
@@ -86,15 +83,6 @@ export const Sidebar = () => {
           </nav>
         </div>
       </ScrollArea>
-      
-      <Button
-        variant="ghost"
-        size="icon"
-        className="absolute right-0 translate-x-1/2 top-4 bg-card border border-border text-muted-foreground rounded-full shadow-md hover:bg-muted"
-        onClick={toggleSidebar}
-      >
-        <PanelLeft className="h-4 w-4" />
-      </Button>
     </aside>
   );
 };

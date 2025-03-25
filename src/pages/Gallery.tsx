@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Sidebar } from "@/components/Sidebar";
 import { Header } from "@/components/Header";
@@ -20,11 +19,17 @@ import {
   HardDrive,
   Database,
   Globe,
+  Code,
 } from "lucide-react";
 
 const Gallery = () => {
   const [activeTab, setActiveTab] = useState("vms");
   const [searchQuery, setSearchQuery] = useState("");
+  const [collapsed, setCollapsed] = useState(false);
+  
+  const toggleSidebar = () => {
+    setCollapsed(!collapsed);
+  };
   
   // Mock VM templates data
   const vmTemplates = [
@@ -158,6 +163,50 @@ const Gallery = () => {
     },
   ];
   
+  // Add software templates data
+  const softwareTemplates = [
+    {
+      id: "software-1",
+      name: "Kubernetes API Connector",
+      category: "API",
+      description: "Kubernetes API integration package for containerized workloads",
+      size: 0.3,
+      downloads: 7840,
+      featured: true,
+      icon: Code,
+    },
+    {
+      id: "software-2",
+      name: "NVIDIA GPU Drivers",
+      category: "Driver",
+      description: "Latest NVIDIA drivers for VM GPU passthrough",
+      size: 0.7,
+      downloads: 5460,
+      featured: true,
+      icon: Code,
+    },
+    {
+      id: "software-3",
+      name: "VM Guest Tools",
+      category: "Utilities",
+      description: "Guest agent tools for performance optimization and management",
+      size: 0.2,
+      downloads: 9230,
+      featured: false,
+      icon: Code,
+    },
+    {
+      id: "software-4",
+      name: "Storage System Firmware",
+      category: "Firmware",
+      description: "Latest firmware for storage controllers and devices",
+      size: 0.5,
+      downloads: 3120,
+      featured: false,
+      icon: Code,
+    },
+  ];
+  
   // Filter templates based on search query
   const filteredVMTemplates = vmTemplates.filter(template => 
     template.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -176,13 +225,22 @@ const Gallery = () => {
     template.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
     template.category.toLowerCase().includes(searchQuery.toLowerCase())
   );
+  
+  const filteredSoftwareTemplates = softwareTemplates.filter(template => 
+    template.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    template.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    template.category.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      <Header />
-      <div className="flex flex-1 overflow-hidden">
-        <Sidebar />
-        <main className="flex-1 overflow-y-auto page-transition">
+      <Header toggleSidebar={toggleSidebar} />
+      <div className="flex flex-1 pt-16">
+        <Sidebar collapsed={collapsed} />
+        <main className={cn(
+          "flex-1 overflow-y-auto page-transition",
+          collapsed ? "ml-[4.5rem]" : "ml-64"
+        )}>
           <ScrollArea className="h-full">
             <div className="p-6">
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
@@ -234,6 +292,7 @@ const Gallery = () => {
                   <TabsTrigger value="vms">Virtual Machines</TabsTrigger>
                   <TabsTrigger value="containers">Containers</TabsTrigger>
                   <TabsTrigger value="storage">Storage</TabsTrigger>
+                  <TabsTrigger value="software">Software</TabsTrigger>
                 </TabsList>
                 
                 <TabsContent value="vms" className="space-y-4">
@@ -286,6 +345,23 @@ const Gallery = () => {
                     </div>
                   )}
                 </TabsContent>
+                
+                <TabsContent value="software" className="space-y-4">
+                  {filteredSoftwareTemplates.length > 0 ? (
+                    <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                      {filteredSoftwareTemplates.map((template) => (
+                        <TemplateCard key={template.id} template={template} />
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-center py-12">
+                      <h3 className="text-lg font-medium">No software found</h3>
+                      <p className="text-muted-foreground mt-1">
+                        Try changing your search criteria
+                      </p>
+                    </div>
+                  )}
+                </TabsContent>
               </Tabs>
             </div>
           </ScrollArea>
@@ -294,6 +370,8 @@ const Gallery = () => {
     </div>
   );
 };
+
+import { cn } from "@/lib/utils";
 
 interface TemplateProps {
   template: {

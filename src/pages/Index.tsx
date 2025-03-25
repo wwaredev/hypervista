@@ -1,16 +1,26 @@
 
+import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Sidebar } from "@/components/Sidebar";
 import { Header } from "@/components/Header";
 import { Dashboard } from "@/components/Dashboard";
 
 const Index = () => {
+  const [collapsed, setCollapsed] = useState(false);
+  
+  const toggleSidebar = () => {
+    setCollapsed(!collapsed);
+  };
+
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      <Header />
+      <Header toggleSidebar={toggleSidebar} />
       <div className="flex flex-1 pt-16">
-        <Sidebar />
-        <main className="flex-1 ml-64 overflow-y-auto h-[calc(100vh-4rem)]">
+        <Sidebar collapsed={collapsed} />
+        <main className={cn(
+          "flex-1 overflow-y-auto h-[calc(100vh-4rem)]",
+          collapsed ? "ml-[4.5rem]" : "ml-64"
+        )}>
           <Tabs defaultValue="overview" className="w-full h-full">
             <div className="border-b px-6 sticky top-0 bg-background z-10">
               <TabsList className="justify-start -mb-px">
@@ -47,5 +57,7 @@ const Index = () => {
     </div>
   );
 };
+
+import { cn } from "@/lib/utils";
 
 export default Index;
