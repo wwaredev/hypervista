@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
@@ -14,10 +13,9 @@ import {
   Shield,
   Umbrella,
   Monitor,
-  ChevronLeft,
-  ChevronRight,
   Cpu,
   GitBranch,
+  PanelLeft,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
@@ -57,11 +55,11 @@ export const Sidebar = () => {
   return (
     <aside
       className={cn(
-        "bg-sidebar text-sidebar-foreground border-r border-sidebar-border h-[calc(100vh-4rem)] flex flex-col transition-all duration-300 sticky top-16 left-0",
+        "bg-sidebar text-sidebar-foreground border-r border-sidebar-border h-[calc(100vh-4rem)] fixed top-16 left-0 transition-all duration-300 z-40",
         collapsed ? "w-[4.5rem]" : "w-64"
       )}
     >
-      <ScrollArea className="flex-1">
+      <ScrollArea className="h-full">
         <div className="py-4">
           <nav className="space-y-1 px-3">
             {links.map((link) => (
@@ -74,32 +72,28 @@ export const Sidebar = () => {
             ))}
           </nav>
         </div>
-      </ScrollArea>
       
-      <div className="border-t border-sidebar-border py-4 px-3">
-        <nav className="space-y-1">
-          {bottomLinks.map((link) => (
-            <NavItem 
-              key={link.href} 
-              link={link} 
-              active={location.pathname === link.href}
-              collapsed={collapsed}
-            />
-          ))}
-        </nav>
-      </div>
+        <div className="border-t border-sidebar-border py-4 px-3 mt-auto">
+          <nav className="space-y-1">
+            {bottomLinks.map((link) => (
+              <NavItem 
+                key={link.href} 
+                link={link} 
+                active={location.pathname === link.href}
+                collapsed={collapsed}
+              />
+            ))}
+          </nav>
+        </div>
+      </ScrollArea>
       
       <Button
         variant="ghost"
         size="icon"
-        className="absolute right-0 translate-x-1/2 top-20 bg-card border border-border text-muted-foreground rounded-full shadow-md hover:bg-muted"
+        className="absolute right-0 translate-x-1/2 top-4 bg-card border border-border text-muted-foreground rounded-full shadow-md hover:bg-muted"
         onClick={toggleSidebar}
       >
-        {collapsed ? (
-          <ChevronRight className="h-4 w-4" />
-        ) : (
-          <ChevronLeft className="h-4 w-4" />
-        )}
+        <PanelLeft className="h-4 w-4" />
       </Button>
     </aside>
   );

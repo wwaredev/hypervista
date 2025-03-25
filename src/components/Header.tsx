@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input";
 
 export const Header = () => {
   return (
-    <header className="h-16 border-b border-border bg-card flex items-center justify-between px-4 lg:px-6 sticky top-0 z-50 w-full">
+    <header className="h-16 border-b border-border bg-card flex items-center justify-between px-4 lg:px-6 fixed top-0 left-0 right-0 z-50 w-full">
       <div className="flex items-center gap-2">
         <div className="w-8 h-8 rounded bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-sm">
           <div className="w-4 h-4 bg-white rounded-sm transform rotate-45"></div>

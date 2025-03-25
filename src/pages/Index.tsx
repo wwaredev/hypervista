@@ -8,9 +8,9 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <Header />
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex flex-1 pt-16">
         <Sidebar />
-        <main className="flex-1 overflow-y-auto">
+        <main className="flex-1 ml-64 overflow-y-auto h-[calc(100vh-4rem)]">
           <Tabs defaultValue="overview" className="w-full h-full">
             <div className="border-b px-6 sticky top-0 bg-background z-10">
               <TabsList className="justify-start -mb-px">
