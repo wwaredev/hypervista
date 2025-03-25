@@ -4,6 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Sidebar } from "@/components/Sidebar";
 import { Header } from "@/components/Header";
 import { Dashboard } from "@/components/Dashboard";
+import { cn } from "@/lib/utils";
 
 const Index = () => {
   const [collapsed, setCollapsed] = useState(false);
@@ -57,7 +58,5 @@ const Index = () => {
     </div>
   );
 };
-
-import { cn } from "@/lib/utils";
 
 export default Index;

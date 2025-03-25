@@ -1,6 +1,7 @@
-
-import { Sidebar } from "@/components/Sidebar";
+import { useState } from "react";
 import { Header } from "@/components/Header";
+import { Sidebar } from "@/components/Sidebar";
+import { cn } from "@/lib/utils";
 import { Network, Plus, RefreshCw, Globe, Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -11,6 +12,12 @@ import { Label } from "@/components/ui/label";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 const Networking = () => {
+  const [collapsed, setCollapsed] = useState(false);
+  
+  const toggleSidebar = () => {
+    setCollapsed(!collapsed);
+  };
+
   // Mock data for virtual networks
   const virtualNetworks = [
     {
@@ -114,10 +121,13 @@ const Networking = () => {
   
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      <Header />
-      <div className="flex flex-1 overflow-hidden">
-        <Sidebar />
-        <main className="flex-1 overflow-y-auto page-transition">
+      <Header toggleSidebar={toggleSidebar} />
+      <div className="flex flex-1 pt-16">
+        <Sidebar collapsed={collapsed} />
+        <main className={cn(
+          "flex-1 overflow-y-auto h-[calc(100vh-4rem)]",
+          collapsed ? "ml-[4.5rem]" : "ml-64"
+        )}>
           <div className="p-6">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
               <div>
