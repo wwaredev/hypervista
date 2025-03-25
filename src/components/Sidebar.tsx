@@ -1,6 +1,8 @@
+
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   BarChart2,
   Cloud,
@@ -55,22 +57,24 @@ export const Sidebar = () => {
   return (
     <aside
       className={cn(
-        "bg-sidebar text-sidebar-foreground border-r border-sidebar-border h-screen flex flex-col transition-all duration-300 sticky top-0 left-0",
+        "bg-sidebar text-sidebar-foreground border-r border-sidebar-border h-[calc(100vh-4rem)] flex flex-col transition-all duration-300 sticky top-16 left-0",
         collapsed ? "w-[4.5rem]" : "w-64"
       )}
     >
-      <div className="flex-1 py-4 overflow-y-auto">
-        <nav className="space-y-1 px-3">
-          {links.map((link) => (
-            <NavItem 
-              key={link.href} 
-              link={link} 
-              active={location.pathname === link.href}
-              collapsed={collapsed}
-            />
-          ))}
-        </nav>
-      </div>
+      <ScrollArea className="flex-1">
+        <div className="py-4">
+          <nav className="space-y-1 px-3">
+            {links.map((link) => (
+              <NavItem 
+                key={link.href} 
+                link={link} 
+                active={location.pathname === link.href}
+                collapsed={collapsed}
+              />
+            ))}
+          </nav>
+        </div>
+      </ScrollArea>
       
       <div className="border-t border-sidebar-border py-4 px-3">
         <nav className="space-y-1">

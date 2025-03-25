@@ -11,8 +11,8 @@ const Index = () => {
       <div className="flex flex-1 overflow-hidden">
         <Sidebar />
         <main className="flex-1 overflow-y-auto">
-          <Tabs defaultValue="overview" className="w-full">
-            <div className="border-b px-6">
+          <Tabs defaultValue="overview" className="w-full h-full">
+            <div className="border-b px-6 sticky top-0 bg-background z-10">
               <TabsList className="justify-start -mb-px">
                 <TabsTrigger value="overview" className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary">Overview</TabsTrigger>
                 <TabsTrigger value="monitoring" className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary">Monitoring</TabsTrigger>
@@ -20,22 +20,22 @@ const Index = () => {
                 <TabsTrigger value="logs" className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary">Logs</TabsTrigger>
               </TabsList>
             </div>
-            <TabsContent value="overview" className="m-0">
+            <TabsContent value="overview" className="m-0 overflow-y-auto">
               <Dashboard />
             </TabsContent>
-            <TabsContent value="monitoring" className="m-0 p-6">
+            <TabsContent value="monitoring" className="m-0 p-6 overflow-y-auto">
               <div className="text-center py-12">
                 <h3 className="text-lg font-medium">Monitoring Dashboard</h3>
                 <p className="text-muted-foreground">Detailed system metrics and alerts</p>
               </div>
             </TabsContent>
-            <TabsContent value="events" className="m-0 p-6">
+            <TabsContent value="events" className="m-0 p-6 overflow-y-auto">
               <div className="text-center py-12">
                 <h3 className="text-lg font-medium">Events Timeline</h3>
                 <p className="text-muted-foreground">System events and notifications</p>
               </div>
             </TabsContent>
-            <TabsContent value="logs" className="m-0 p-6">
+            <TabsContent value="logs" className="m-0 p-6 overflow-y-auto">
               <div className="text-center py-12">
                 <h3 className="text-lg font-medium">System Logs</h3>
                 <p className="text-muted-foreground">Detailed logging information</p>

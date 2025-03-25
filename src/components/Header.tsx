@@ -13,12 +13,12 @@ import { Input } from "@/components/ui/input";
 
 export const Header = () => {
   return (
-    <header className="h-16 border-b border-border bg-card flex items-center justify-between px-4 lg:px-6">
+    <header className="h-16 border-b border-border bg-card flex items-center justify-between px-4 lg:px-6 sticky top-0 z-50 w-full">
       <div className="flex items-center gap-2">
-        <div className="w-8 h-8 rounded-md bg-hyperblue-500 flex items-center justify-center">
-          <div className="w-4 h-4 bg-white rounded-sm"></div>
+        <div className="w-8 h-8 rounded bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-sm">
+          <div className="w-4 h-4 bg-white rounded-sm transform rotate-45"></div>
         </div>
-        <h1 className="text-xl font-semibold">HyperVista Control</h1>
+        <h1 className="text-xl font-semibold">SysVCenter</h1>
       </div>
 
       <div className="hidden md:flex items-center space-x-1 flex-1 max-w-md mx-4">
