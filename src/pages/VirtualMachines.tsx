@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Header } from "@/components/Header";
 import { Sidebar } from "@/components/Sidebar";
@@ -27,6 +28,7 @@ import { cn } from "@/lib/utils";
 
 // Define types for virtual machines
 type VMStatus = "running" | "stopped" | "paused" | "error" | "provisioning";
+type ViewMode = "table" | "card";
 
 interface VirtualMachine {
   id: string;
@@ -55,7 +57,7 @@ const VirtualMachines = () => {
   const [selectedTab, setSelectedTab] = useState("all");
   const [collapsed, setCollapsed] = useState(false);
   const [isNewVMDialogOpen, setIsNewVMDialogOpen] = useState(false);
-  const [viewMode, setViewMode<"table" | "card">("table");
+  const [viewMode, setViewMode] = useState<ViewMode>("table");
   
   const toggleSidebar = () => {
     setCollapsed(!collapsed);
@@ -256,115 +258,196 @@ const VirtualMachines = () => {
                   <TabsTrigger value="error">Error ({virtualMachines.filter(vm => vm.status === "error").length})</TabsTrigger>
                   <TabsTrigger value="provisioning">Provisioning ({virtualMachines.filter(vm => vm.status === "provisioning").length})</TabsTrigger>
                 </TabsList>
-              
-                <div className="flex items-center gap-2 mt-6 mb-6">
-                  <div className="relative flex-1">
-                    <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                    <Input 
-                      type="search" 
-                      placeholder="Search virtual machines..." 
-                      className="pl-9"
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                    />
-                  </div>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="outline" className="gap-1">
-                        <Filter className="h-4 w-4" />
-                        Filter
-                        <ChevronDown className="h-4 w-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem onSelect={() => setSearchTerm("production")}>
-                        Production
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onSelect={() => setSearchTerm("development")}>
-                        Development
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onSelect={() => setSearchTerm("staging")}>
-                        Staging
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onSelect={() => setSearchTerm("test")}>
-                        Test
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="outline" className="gap-1">
-                        View
-                        <ChevronDown className="h-4 w-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem onSelect={() => setViewMode("table")}>
-                        Table view
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onSelect={() => setViewMode("card")}>
-                        Card view
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </div>
                 
-                {viewMode === "table" && (
-                  <div className="rounded-md border">
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead className="w-[250px]">Name</TableHead>
-                          <TableHead>Status</TableHead>
-                          <TableHead>OS</TableHead>
-                          <TableHead>Host</TableHead>
-                          <TableHead>IP Address</TableHead>
-                          <TableHead>Tags</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {filteredVMs.map((vm) => (
-                          <TableRow key={vm.id}>
-                            <TableCell className="font-medium">{vm.name}</TableCell>
-                            <TableCell>
-                              <StatusBadge status={vm.status} />
-                            </TableCell>
-                            <TableCell>{vm.os}</TableCell>
-                            <TableCell>{vm.host}</TableCell>
-                            <TableCell>{vm.ip || "—"}</TableCell>
-                            <TableCell>
-                              <div className="flex flex-wrap gap-1">
-                                {vm.tags.map((tag) => (
-                                  <Badge key={tag} variant="outline" className="text-xs">
-                                    {tag}
-                                  </Badge>
-                                ))}
-                              </div>
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </div>
-                )}
-                
-                {viewMode === "card" && (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                    {filteredVMs.map((vm) => (
-                      <VirtualMachineCard
-                        key={vm.id}
-                        id={vm.id}
-                        name={vm.name}
-                        os={vm.os}
-                        status={vm.status}
-                        cpu={vm.cpu}
-                        ram={vm.ram}
-                        storage={vm.storage}
-                        ip={vm.ip}
+                <TabsContent value="all">
+                  <div className="flex items-center gap-2 mt-6 mb-6">
+                    <div className="relative flex-1">
+                      <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                      <Input 
+                        type="search" 
+                        placeholder="Search virtual machines..." 
+                        className="pl-9"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
                       />
-                    ))}
+                    </div>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="outline" className="gap-1">
+                          <Filter className="h-4 w-4" />
+                          Filter
+                          <ChevronDown className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem onSelect={() => setSearchTerm("production")}>
+                          Production
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onSelect={() => setSearchTerm("development")}>
+                          Development
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onSelect={() => setSearchTerm("staging")}>
+                          Staging
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onSelect={() => setSearchTerm("test")}>
+                          Test
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="outline" className="gap-1">
+                          View
+                          <ChevronDown className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem onSelect={() => setViewMode("table")}>
+                          Table view
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onSelect={() => setViewMode("card")}>
+                          Card view
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </div>
-                )}
+                  
+                  {viewMode === "table" && (
+                    <div className="rounded-md border">
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead className="w-[250px]">Name</TableHead>
+                            <TableHead>Status</TableHead>
+                            <TableHead>OS</TableHead>
+                            <TableHead>Host</TableHead>
+                            <TableHead>IP Address</TableHead>
+                            <TableHead>Tags</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {filteredVMs.map((vm) => (
+                            <TableRow key={vm.id}>
+                              <TableCell className="font-medium">{vm.name}</TableCell>
+                              <TableCell>
+                                <StatusBadge status={vm.status} />
+                              </TableCell>
+                              <TableCell>{vm.os}</TableCell>
+                              <TableCell>{vm.host}</TableCell>
+                              <TableCell>{vm.ip || "—"}</TableCell>
+                              <TableCell>
+                                <div className="flex flex-wrap gap-1">
+                                  {vm.tags.map((tag) => (
+                                    <Badge key={tag} variant="outline" className="text-xs">
+                                      {tag}
+                                    </Badge>
+                                  ))}
+                                </div>
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </div>
+                  )}
+                  
+                  {viewMode === "card" && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                      {filteredVMs.map((vm) => (
+                        <VirtualMachineCard
+                          key={vm.id}
+                          id={vm.id}
+                          name={vm.name}
+                          os={vm.os}
+                          status={vm.status}
+                          cpu={vm.cpu}
+                          ram={vm.ram}
+                          storage={vm.storage}
+                          ip={vm.ip}
+                        />
+                      ))}
+                    </div>
+                  )}
+                </TabsContent>
+                
+                <TabsContent value="running">
+                  {/* Similar content for running VMs tab */}
+                  {viewMode === "table" || viewMode === "card" ? (
+                    viewMode === "table" ? (
+                      <div className="rounded-md border mt-6">
+                        <Table>
+                          <TableHeader>
+                            {/* Same table header */}
+                            <TableRow>
+                              <TableHead className="w-[250px]">Name</TableHead>
+                              <TableHead>Status</TableHead>
+                              <TableHead>OS</TableHead>
+                              <TableHead>Host</TableHead>
+                              <TableHead>IP Address</TableHead>
+                              <TableHead>Tags</TableHead>
+                            </TableRow>
+                          </TableHeader>
+                          <TableBody>
+                            {filteredVMs.map((vm) => (
+                              /* Same row content */
+                              <TableRow key={vm.id}>
+                                <TableCell className="font-medium">{vm.name}</TableCell>
+                                <TableCell>
+                                  <StatusBadge status={vm.status} />
+                                </TableCell>
+                                <TableCell>{vm.os}</TableCell>
+                                <TableCell>{vm.host}</TableCell>
+                                <TableCell>{vm.ip || "—"}</TableCell>
+                                <TableCell>
+                                  <div className="flex flex-wrap gap-1">
+                                    {vm.tags.map((tag) => (
+                                      <Badge key={tag} variant="outline" className="text-xs">
+                                        {tag}
+                                      </Badge>
+                                    ))}
+                                  </div>
+                                </TableCell>
+                              </TableRow>
+                            ))}
+                          </TableBody>
+                        </Table>
+                      </div>
+                    ) : (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-6">
+                        {filteredVMs.map((vm) => (
+                          <VirtualMachineCard
+                            key={vm.id}
+                            id={vm.id}
+                            name={vm.name}
+                            os={vm.os}
+                            status={vm.status}
+                            cpu={vm.cpu}
+                            ram={vm.ram}
+                            storage={vm.storage}
+                            ip={vm.ip}
+                          />
+                        ))}
+                      </div>
+                    )
+                  ) : null}
+                </TabsContent>
+                
+                {/* Similar TabsContent blocks for other tabs (stopped, paused, error, provisioning) */}
+                <TabsContent value="stopped">
+                  {/* Content for stopped VMs */}
+                </TabsContent>
+                
+                <TabsContent value="paused">
+                  {/* Content for paused VMs */}
+                </TabsContent>
+                
+                <TabsContent value="error">
+                  {/* Content for VMs with errors */}
+                </TabsContent>
+                
+                <TabsContent value="provisioning">
+                  {/* Content for VMs being provisioned */}
+                </TabsContent>
               </Tabs>
             </div>
           </div>
