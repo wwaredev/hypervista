@@ -22,6 +22,7 @@ import { Badge } from "@/components/ui/badge";
 import { ChevronDown, Filter, Plus, Search } from "lucide-react";
 import { StatusBadge } from "@/components/StatusBadge";
 import { VirtualMachineCard } from "@/components/VirtualMachineCard";
+import { NewVMDialog } from "@/components/NewVMDialog";
 import { cn } from "@/lib/utils";
 
 // Define types for virtual machines
@@ -53,6 +54,8 @@ const VirtualMachines = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedTab, setSelectedTab] = useState("all");
   const [collapsed, setCollapsed] = useState(false);
+  const [isNewVMDialogOpen, setIsNewVMDialogOpen] = useState(false);
+  const [viewMode, setViewMode<"table" | "card">("table");
   
   const toggleSidebar = () => {
     setCollapsed(!collapsed);
@@ -237,7 +240,7 @@ const VirtualMachines = () => {
                 <h1 className="text-2xl font-bold tracking-tight">Virtual Machines</h1>
                 <p className="text-muted-foreground">Manage and monitor your virtual machines</p>
               </div>
-              <Button>
+              <Button onClick={() => setIsNewVMDialogOpen(true)}>
                 <Plus className="mr-2 h-4 w-4" />
                 New VM
               </Button>
@@ -296,17 +299,17 @@ const VirtualMachines = () => {
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                      <DropdownMenuItem>
+                      <DropdownMenuItem onSelect={() => setViewMode("table")}>
                         Table view
                       </DropdownMenuItem>
-                      <DropdownMenuItem>
+                      <DropdownMenuItem onSelect={() => setViewMode("card")}>
                         Card view
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </div>
                 
-                <TabsContent value="all" className="m-0">
+                {viewMode === "table" && (
                   <div className="rounded-md border">
                     <Table>
                       <TableHeader>
@@ -343,9 +346,9 @@ const VirtualMachines = () => {
                       </TableBody>
                     </Table>
                   </div>
-                </TabsContent>
+                )}
                 
-                <TabsContent value="running" className="m-0">
+                {viewMode === "card" && (
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                     {filteredVMs.map((vm) => (
                       <VirtualMachineCard
@@ -361,84 +364,17 @@ const VirtualMachines = () => {
                       />
                     ))}
                   </div>
-                </TabsContent>
-                
-                <TabsContent value="stopped" className="m-0">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                    {filteredVMs.map((vm) => (
-                      <VirtualMachineCard
-                        key={vm.id}
-                        id={vm.id}
-                        name={vm.name}
-                        os={vm.os}
-                        status={vm.status}
-                        cpu={vm.cpu}
-                        ram={vm.ram}
-                        storage={vm.storage}
-                        ip={vm.ip}
-                      />
-                    ))}
-                  </div>
-                </TabsContent>
-                
-                <TabsContent value="paused" className="m-0">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                    {filteredVMs.map((vm) => (
-                      <VirtualMachineCard
-                        key={vm.id}
-                        id={vm.id}
-                        name={vm.name}
-                        os={vm.os}
-                        status={vm.status}
-                        cpu={vm.cpu}
-                        ram={vm.ram}
-                        storage={vm.storage}
-                        ip={vm.ip}
-                      />
-                    ))}
-                  </div>
-                </TabsContent>
-                
-                <TabsContent value="error" className="m-0">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                    {filteredVMs.map((vm) => (
-                      <VirtualMachineCard
-                        key={vm.id}
-                        id={vm.id}
-                        name={vm.name}
-                        os={vm.os}
-                        status={vm.status}
-                        cpu={vm.cpu}
-                        ram={vm.ram}
-                        storage={vm.storage}
-                        ip={vm.ip}
-                      />
-                    ))}
-                  </div>
-                </TabsContent>
-                
-                <TabsContent value="provisioning" className="m-0">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                    {filteredVMs.map((vm) => (
-                      <VirtualMachineCard
-                        key={vm.id}
-                        id={vm.id}
-                        name={vm.name}
-                        os={vm.os}
-                        status={vm.status}
-                        cpu={vm.cpu}
-                        ram={vm.ram}
-                        storage={vm.storage}
-                        ip={vm.ip}
-                      />
-                    ))}
-                  </div>
-                </TabsContent>
+                )}
               </Tabs>
             </div>
           </div>
         </main>
       </div>
+      
+      <NewVMDialog 
+        open={isNewVMDialogOpen} 
+        onOpenChange={setIsNewVMDialogOpen} 
+      />
     </div>
   );
 };

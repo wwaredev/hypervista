@@ -3,147 +3,152 @@ import { useState } from "react";
 import { Header } from "@/components/Header";
 import { Sidebar } from "@/components/Sidebar";
 import { cn } from "@/lib/utils";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { 
+  Card, 
+  CardContent, 
+  CardDescription, 
+  CardHeader, 
+  CardTitle 
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Progress } from "@/components/ui/progress";
-import { MapPin, Activity, Server, ArrowUpDown, Globe, Wifi } from "lucide-react";
+import { Globe, MapPin, Share2 } from "lucide-react";
 
-interface DatacenterProps {
+interface DataCenterLocation {
   id: string;
   name: string;
-  location: string;
-  region: string;
-  status: "active" | "maintenance" | "degraded";
-  utilization: number;
-  hyperconvergence: string[];
-  metrics: {
-    uptime: string;
-    latency: string;
-    availability: string;
-  };
-  connections: {
-    id: string;
-    name: string;
-  }[];
+  city: string;
+  country: string;
+  region: "NORTH_AMERICA" | "SOUTH_AMERICA" | "EMEA" | "ASIA" | "OCEANIA";
+  coordinates: [number, number]; // [longitude, latitude]
+  status: "active" | "maintenance" | "offline" | "planned";
+  tier: "Tier 1" | "Tier 2" | "Tier 3" | "Tier 4";
+  vdcs: number;
+  connections: string[];
 }
-
-const datacenters: DatacenterProps[] = [
-  {
-    id: "dc-us-east-1",
-    name: "US East Primary",
-    location: "Virginia, USA",
-    region: "US East (N. Virginia)",
-    status: "active",
-    utilization: 78,
-    hyperconvergence: ["Storage Cluster", "Compute Grid", "Network Fabric"],
-    metrics: {
-      uptime: "99.998%",
-      latency: "4.2ms",
-      availability: "99.99%"
-    },
-    connections: [
-      { id: "dc-us-west-1", name: "US West Primary" },
-      { id: "dc-eu-west-1", name: "EU West Primary" }
-    ]
-  },
-  {
-    id: "dc-us-west-1",
-    name: "US West Primary",
-    location: "Oregon, USA",
-    region: "US West (Oregon)",
-    status: "active",
-    utilization: 62,
-    hyperconvergence: ["Storage Cluster", "Compute Grid"],
-    metrics: {
-      uptime: "99.995%",
-      latency: "5.1ms",
-      availability: "99.98%"
-    },
-    connections: [
-      { id: "dc-us-east-1", name: "US East Primary" },
-      { id: "dc-ap-southeast-1", name: "APAC Southeast" }
-    ]
-  },
-  {
-    id: "dc-eu-west-1",
-    name: "EU West Primary",
-    location: "Dublin, Ireland",
-    region: "EU West (Ireland)",
-    status: "active",
-    utilization: 71,
-    hyperconvergence: ["Storage Cluster", "Network Fabric"],
-    metrics: {
-      uptime: "99.996%",
-      latency: "4.8ms",
-      availability: "99.99%"
-    },
-    connections: [
-      { id: "dc-us-east-1", name: "US East Primary" },
-      { id: "dc-eu-central-1", name: "EU Central" }
-    ]
-  },
-  {
-    id: "dc-eu-central-1",
-    name: "EU Central",
-    location: "Frankfurt, Germany",
-    region: "EU Central (Frankfurt)",
-    status: "maintenance",
-    utilization: 43,
-    hyperconvergence: ["Compute Grid", "Network Fabric"],
-    metrics: {
-      uptime: "99.982%",
-      latency: "5.2ms",
-      availability: "99.95%"
-    },
-    connections: [
-      { id: "dc-eu-west-1", name: "EU West Primary" }
-    ]
-  },
-  {
-    id: "dc-ap-southeast-1",
-    name: "APAC Southeast",
-    location: "Singapore",
-    region: "APAC Southeast (Singapore)",
-    status: "degraded",
-    utilization: 86,
-    hyperconvergence: ["Storage Cluster"],
-    metrics: {
-      uptime: "99.975%",
-      latency: "7.3ms",
-      availability: "99.90%"
-    },
-    connections: [
-      { id: "dc-us-west-1", name: "US West Primary" },
-      { id: "dc-ap-northeast-1", name: "APAC Northeast" }
-    ]
-  },
-  {
-    id: "dc-ap-northeast-1",
-    name: "APAC Northeast",
-    location: "Tokyo, Japan",
-    region: "APAC Northeast (Tokyo)",
-    status: "active",
-    utilization: 67,
-    hyperconvergence: ["Storage Cluster", "Compute Grid", "Network Fabric"],
-    metrics: {
-      uptime: "99.994%",
-      latency: "6.1ms",
-      availability: "99.97%"
-    },
-    connections: [
-      { id: "dc-ap-southeast-1", name: "APAC Southeast" }
-    ]
-  }
-];
 
 const Locations = () => {
   const [collapsed, setCollapsed] = useState(false);
-  const [activeTab, setActiveTab] = useState("datacenters");
   
   const toggleSidebar = () => {
     setCollapsed(!collapsed);
+  };
+
+  // Sample data center locations
+  const locations: DataCenterLocation[] = [
+    {
+      id: "dc-1",
+      name: "US East",
+      city: "Virginia",
+      country: "United States",
+      region: "NORTH_AMERICA",
+      coordinates: [-78.024902, 37.926868],
+      status: "active",
+      tier: "Tier 4",
+      vdcs: 3,
+      connections: ["US West", "EU Central", "South America"]
+    },
+    {
+      id: "dc-2",
+      name: "US West",
+      city: "California",
+      country: "United States",
+      region: "NORTH_AMERICA",
+      coordinates: [-122.431297, 37.773972],
+      status: "active",
+      tier: "Tier 4",
+      vdcs: 2,
+      connections: ["US East", "Asia Pacific", "EU Central"]
+    },
+    {
+      id: "dc-3",
+      name: "EU Central",
+      city: "Frankfurt",
+      country: "Germany",
+      region: "EMEA",
+      coordinates: [8.682127, 50.110924],
+      status: "active",
+      tier: "Tier 4",
+      vdcs: 3,
+      connections: ["US East", "US West", "UK", "Asia Pacific"]
+    },
+    {
+      id: "dc-4",
+      name: "Asia Pacific",
+      city: "Tokyo",
+      country: "Japan",
+      region: "ASIA",
+      coordinates: [139.691711, 35.689487],
+      status: "active",
+      tier: "Tier 3",
+      vdcs: 2,
+      connections: ["US West", "EU Central", "Australia"]
+    },
+    {
+      id: "dc-5",
+      name: "UK",
+      city: "London",
+      country: "United Kingdom",
+      region: "EMEA",
+      coordinates: [-0.118092, 51.509865],
+      status: "maintenance",
+      tier: "Tier 3",
+      vdcs: 1,
+      connections: ["EU Central"]
+    },
+    {
+      id: "dc-6",
+      name: "South America",
+      city: "São Paulo",
+      country: "Brazil",
+      region: "SOUTH_AMERICA",
+      coordinates: [-46.633308, -23.550520],
+      status: "active",
+      tier: "Tier 2",
+      vdcs: 1,
+      connections: ["US East"]
+    },
+    {
+      id: "dc-7",
+      name: "Australia",
+      city: "Sydney",
+      country: "Australia",
+      region: "OCEANIA",
+      coordinates: [151.209900, -33.865143],
+      status: "active",
+      tier: "Tier 3",
+      vdcs: 1,
+      connections: ["Asia Pacific"]
+    },
+    {
+      id: "dc-8",
+      name: "India",
+      city: "Mumbai",
+      country: "India",
+      region: "ASIA",
+      coordinates: [72.877426, 19.076090],
+      status: "planned",
+      tier: "Tier 3",
+      vdcs: 0,
+      connections: ["Asia Pacific", "EU Central"]
+    },
+  ];
+
+  // Status badge colors for data centers
+  const getStatusBadge = (status: DataCenterLocation['status']) => {
+    switch (status) {
+      case 'active':
+        return <Badge className="bg-green-600">Active</Badge>;
+      case 'maintenance':
+        return <Badge variant="outline" className="text-amber-500 border-amber-500">Maintenance</Badge>;
+      case 'offline':
+        return <Badge variant="destructive">Offline</Badge>;
+      case 'planned':
+        return <Badge variant="outline" className="text-blue-500 border-blue-500">Planned</Badge>;
+      default:
+        return null;
+    }
   };
 
   return (
@@ -155,319 +160,265 @@ const Locations = () => {
           "flex-1 overflow-y-auto h-[calc(100vh-4rem)]",
           collapsed ? "ml-[4.5rem]" : "ml-64"
         )}>
-          <ScrollArea className="h-full">
-            <div className="p-6">
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
-                <div>
-                  <h1 className="text-2xl font-bold mb-1 flex items-center gap-2">
-                    <MapPin className="h-6 w-6" />
-                    DC Locations
-                  </h1>
-                  <p className="text-muted-foreground">
-                    Global datacenter locations and infrastructure
-                  </p>
-                </div>
+          <div className="p-6">
+            <div className="flex justify-between items-center mb-6">
+              <div>
+                <h1 className="text-2xl font-bold tracking-tight">Data Center Locations</h1>
+                <p className="text-muted-foreground">Global map of physical data centers</p>
               </div>
-              
-              <Tabs defaultValue="datacenters" value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-                <TabsList>
-                  <TabsTrigger value="datacenters">Datacenters</TabsTrigger>
-                  <TabsTrigger value="regions">Regions</TabsTrigger>
-                  <TabsTrigger value="metrics">Metrics</TabsTrigger>
-                  <TabsTrigger value="connections">Connections</TabsTrigger>
-                </TabsList>
-                
-                <TabsContent value="datacenters" className="space-y-4">
-                  <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-                    {datacenters.map((dc) => (
-                      <DatacenterCard key={dc.id} datacenter={dc} />
-                    ))}
-                  </div>
-                </TabsContent>
-                
-                <TabsContent value="regions" className="space-y-4">
-                  <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-2">
-                    <RegionMap />
-                    <RegionsList datacenters={datacenters} />
-                  </div>
-                </TabsContent>
-                
-                <TabsContent value="metrics" className="space-y-4">
-                  <div className="grid gap-6 grid-cols-1 md:grid-cols-3">
-                    <MetricCard 
-                      title="Global Uptime" 
-                      value="99.994%" 
-                      description="Average across all datacenters" 
-                      icon={Activity}
-                    />
-                    <MetricCard 
-                      title="Average Latency" 
-                      value="5.4ms" 
-                      description="Inter-datacenter communication" 
-                      icon={ArrowUpDown}
-                    />
-                    <MetricCard 
-                      title="Availability" 
-                      value="99.98%" 
-                      description="Service level achievement" 
-                      icon={Server}
-                    />
-                  </div>
-                  <div className="grid gap-6 grid-cols-1">
-                    <DatacenterMetricsTable datacenters={datacenters} />
-                  </div>
-                </TabsContent>
-                
-                <TabsContent value="connections" className="space-y-4">
-                  <ConnectionsMap datacenters={datacenters} />
-                </TabsContent>
-              </Tabs>
+              <Button>
+                <MapPin className="mr-2 h-4 w-4" />
+                Add Location
+              </Button>
             </div>
-          </ScrollArea>
+
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-lg">Total DCs</CardTitle>
+                  <CardDescription>Data centers</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-3xl font-bold">{locations.length}</div>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-lg">Regions</CardTitle>
+                  <CardDescription>Worldwide</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-3xl font-bold">
+                    {new Set(locations.map(loc => loc.region)).size}
+                  </div>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-lg">Active DCs</CardTitle>
+                  <CardDescription>Operational status</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-3xl font-bold">
+                    {locations.filter(loc => loc.status === 'active').length}
+                  </div>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-lg">Total VDCs</CardTitle>
+                  <CardDescription>Virtual data centers</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-3xl font-bold">
+                    {locations.reduce((acc, loc) => acc + loc.vdcs, 0)}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            <Card className="mb-8">
+              <CardHeader>
+                <CardTitle>Global Data Center Network</CardTitle>
+                <CardDescription>Map view of all data center locations</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="relative w-full h-[500px] rounded-md overflow-hidden bg-slate-900 flex items-center justify-center">
+                  <div className="absolute inset-0 opacity-20 bg-[url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072')] bg-cover"></div>
+                  
+                  {/* This is a placeholder for a real map visualization */}
+                  <div className="relative z-10 text-center p-6">
+                    <Globe className="h-20 w-20 mx-auto mb-4 text-blue-400" />
+                    <h3 className="text-white text-xl mb-4">Interactive World Map</h3>
+                    <p className="text-slate-300 max-w-md mx-auto mb-4">
+                      This would be an interactive map showing all data center locations with connections between them. 
+                      Locations are spread across {new Set(locations.map(loc => loc.region)).size} regions worldwide.
+                    </p>
+                    <div className="flex justify-center gap-2 flex-wrap">
+                      {locations.map(loc => (
+                        <Badge key={loc.id} variant="outline" className="text-white border-white">
+                          <MapPin className="h-3 w-3 mr-1" />{loc.name}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Tabs defaultValue="all">
+              <TabsList className="mb-6">
+                <TabsTrigger value="all">All Locations</TabsTrigger>
+                <TabsTrigger value="na">North America</TabsTrigger>
+                <TabsTrigger value="emea">EMEA</TabsTrigger>
+                <TabsTrigger value="asia">Asia</TabsTrigger>
+                <TabsTrigger value="other">Other</TabsTrigger>
+              </TabsList>
+              
+              <TabsContent value="all">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                  {locations.map((location) => (
+                    <Card key={location.id}>
+                      <CardHeader>
+                        <div className="flex items-center justify-between">
+                          <CardTitle>{location.name}</CardTitle>
+                          {getStatusBadge(location.status)}
+                        </div>
+                        <CardDescription>{location.city}, {location.country}</CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="flex flex-col gap-2 text-sm">
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">Region:</span>
+                            <span>{location.region.replace('_', ' ')}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">Tier:</span>
+                            <span>{location.tier}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">Virtual DCs:</span>
+                            <span>{location.vdcs}</span>
+                          </div>
+                          <div className="mt-2">
+                            <span className="text-muted-foreground text-xs">Connected to:</span>
+                            <div className="flex flex-wrap gap-1 mt-1">
+                              {location.connections.map((conn, idx) => (
+                                <Badge key={idx} variant="outline" className="text-xs">
+                                  <Share2 className="h-2 w-2 mr-1" />
+                                  {conn}
+                                </Badge>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </TabsContent>
+              
+              <TabsContent value="na">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {locations.filter(loc => loc.region === "NORTH_AMERICA").map((location) => (
+                    <Card key={location.id}>
+                      <CardHeader>
+                        <div className="flex items-center justify-between">
+                          <CardTitle>{location.name}</CardTitle>
+                          {getStatusBadge(location.status)}
+                        </div>
+                        <CardDescription>{location.city}, {location.country}</CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="flex flex-col gap-2 text-sm">
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">Tier:</span>
+                            <span>{location.tier}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">Virtual DCs:</span>
+                            <span>{location.vdcs}</span>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </TabsContent>
+              
+              {/* Similar code for other tabs (EMEA, Asia, Other) */}
+              <TabsContent value="emea">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {locations.filter(loc => loc.region === "EMEA").map((location) => (
+                    <Card key={location.id}>
+                      <CardHeader>
+                        <div className="flex items-center justify-between">
+                          <CardTitle>{location.name}</CardTitle>
+                          {getStatusBadge(location.status)}
+                        </div>
+                        <CardDescription>{location.city}, {location.country}</CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="flex flex-col gap-2 text-sm">
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">Tier:</span>
+                            <span>{location.tier}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">Virtual DCs:</span>
+                            <span>{location.vdcs}</span>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </TabsContent>
+              
+              <TabsContent value="asia">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {locations.filter(loc => loc.region === "ASIA").map((location) => (
+                    <Card key={location.id}>
+                      <CardHeader>
+                        <div className="flex items-center justify-between">
+                          <CardTitle>{location.name}</CardTitle>
+                          {getStatusBadge(location.status)}
+                        </div>
+                        <CardDescription>{location.city}, {location.country}</CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="flex flex-col gap-2 text-sm">
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">Tier:</span>
+                            <span>{location.tier}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">Virtual DCs:</span>
+                            <span>{location.vdcs}</span>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </TabsContent>
+              
+              <TabsContent value="other">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {locations.filter(loc => !["NORTH_AMERICA", "EMEA", "ASIA"].includes(loc.region)).map((location) => (
+                    <Card key={location.id}>
+                      <CardHeader>
+                        <div className="flex items-center justify-between">
+                          <CardTitle>{location.name}</CardTitle>
+                          {getStatusBadge(location.status)}
+                        </div>
+                        <CardDescription>{location.city}, {location.country}</CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="flex flex-col gap-2 text-sm">
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">Region:</span>
+                            <span>{location.region.replace('_', ' ')}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">Tier:</span>
+                            <span>{location.tier}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">Virtual DCs:</span>
+                            <span>{location.vdcs}</span>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </TabsContent>
+            </Tabs>
+          </div>
         </main>
       </div>
     </div>
-  );
-};
-
-const DatacenterCard = ({ datacenter }: { datacenter: DatacenterProps }) => {
-  const statusColors = {
-    active: "bg-green-500/20 text-green-700",
-    maintenance: "bg-amber-500/20 text-amber-700",
-    degraded: "bg-red-500/20 text-red-700"
-  };
-  
-  const statusText = {
-    active: "Active",
-    maintenance: "Maintenance",
-    degraded: "Degraded"
-  };
-  
-  return (
-    <Card className="overflow-hidden hover:shadow-md transition-all">
-      <CardHeader className="pb-2">
-        <div className="flex justify-between items-start">
-          <CardTitle className="text-lg">{datacenter.name}</CardTitle>
-          <Badge className={statusColors[datacenter.status]}>
-            {statusText[datacenter.status]}
-          </Badge>
-        </div>
-        <div className="text-muted-foreground text-sm flex items-center gap-1">
-          <MapPin className="h-3 w-3" /> {datacenter.location}
-        </div>
-      </CardHeader>
-      <CardContent>
-        <div className="space-y-4">
-          <div>
-            <div className="flex justify-between mb-1 text-sm">
-              <span>Utilization</span>
-              <span>{datacenter.utilization}%</span>
-            </div>
-            <Progress value={datacenter.utilization} className="h-2" />
-          </div>
-          
-          <div>
-            <h4 className="text-sm font-medium mb-2">Hyperconvergence</h4>
-            <div className="flex flex-wrap gap-2">
-              {datacenter.hyperconvergence.map((item, index) => (
-                <Badge key={index} variant="outline" className="bg-hyperblue-50 text-hyperblue-700 border-hyperblue-200">
-                  {item}
-                </Badge>
-              ))}
-            </div>
-          </div>
-          
-          <div className="grid grid-cols-3 gap-2 text-sm">
-            <div>
-              <div className="text-muted-foreground">Uptime</div>
-              <div className="font-medium">{datacenter.metrics.uptime}</div>
-            </div>
-            <div>
-              <div className="text-muted-foreground">Latency</div>
-              <div className="font-medium">{datacenter.metrics.latency}</div>
-            </div>
-            <div>
-              <div className="text-muted-foreground">Availability</div>
-              <div className="font-medium">{datacenter.metrics.availability}</div>
-            </div>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
-  );
-};
-
-const RegionMap = () => {
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Global Regions</CardTitle>
-      </CardHeader>
-      <CardContent className="h-[400px] relative flex items-center justify-center">
-        <div className="text-center text-muted-foreground">
-          <Globe className="h-16 w-16 mx-auto mb-4 opacity-20" />
-          <p>Interactive region map visualization</p>
-          <p className="text-sm">(World map with datacenter locations)</p>
-        </div>
-      </CardContent>
-    </Card>
-  );
-};
-
-const RegionsList = ({ datacenters }: { datacenters: DatacenterProps[] }) => {
-  // Group datacenters by region
-  const regions = datacenters.reduce((acc, dc) => {
-    if (!acc[dc.region]) {
-      acc[dc.region] = [];
-    }
-    acc[dc.region].push(dc);
-    return acc;
-  }, {} as Record<string, DatacenterProps[]>);
-  
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Regions & Availability</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="space-y-4">
-          {Object.entries(regions).map(([regionName, dcs]) => (
-            <div key={regionName} className="pb-3 border-b last:border-0 last:pb-0">
-              <h3 className="font-medium mb-2">{regionName}</h3>
-              <div className="space-y-2">
-                {dcs.map(dc => (
-                  <div key={dc.id} className="flex justify-between items-center">
-                    <div className="flex items-center gap-2">
-                      <div className={cn(
-                        "w-2 h-2 rounded-full",
-                        dc.status === "active" ? "bg-green-500" :
-                        dc.status === "maintenance" ? "bg-amber-500" : "bg-red-500"
-                      )} />
-                      <span>{dc.name}</span>
-                    </div>
-                    <span className="text-sm text-muted-foreground">
-                      {dc.metrics.availability}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      </CardContent>
-    </Card>
-  );
-};
-
-const MetricCard = ({ 
-  title, 
-  value, 
-  description, 
-  icon: Icon 
-}: { 
-  title: string;
-  value: string;
-  description: string;
-  icon: React.ElementType;
-}) => {
-  return (
-    <Card>
-      <CardContent className="pt-6">
-        <div className="flex items-center justify-between mb-2">
-          <h3 className="text-lg font-medium">{title}</h3>
-          <Icon className="h-5 w-5 text-muted-foreground" />
-        </div>
-        <div className="text-3xl font-bold mb-1">{value}</div>
-        <p className="text-sm text-muted-foreground">{description}</p>
-      </CardContent>
-    </Card>
-  );
-};
-
-const DatacenterMetricsTable = ({ datacenters }: { datacenters: DatacenterProps[] }) => {
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Datacenter Performance</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead>
-              <tr className="border-b">
-                <th className="text-left py-3 px-4 font-medium">Datacenter</th>
-                <th className="text-left py-3 px-4 font-medium">Region</th>
-                <th className="text-left py-3 px-4 font-medium">Status</th>
-                <th className="text-left py-3 px-4 font-medium">Uptime</th>
-                <th className="text-left py-3 px-4 font-medium">Latency</th>
-                <th className="text-left py-3 px-4 font-medium">Availability</th>
-                <th className="text-left py-3 px-4 font-medium">Utilization</th>
-              </tr>
-            </thead>
-            <tbody>
-              {datacenters.map(dc => (
-                <tr key={dc.id} className="border-b last:border-0 hover:bg-muted/50">
-                  <td className="py-3 px-4">{dc.name}</td>
-                  <td className="py-3 px-4">{dc.region}</td>
-                  <td className="py-3 px-4">
-                    <Badge className={cn(
-                      dc.status === "active" ? "bg-green-500/20 text-green-700" :
-                      dc.status === "maintenance" ? "bg-amber-500/20 text-amber-700" : 
-                      "bg-red-500/20 text-red-700"
-                    )}>
-                      {dc.status === "active" ? "Active" : 
-                       dc.status === "maintenance" ? "Maintenance" : "Degraded"}
-                    </Badge>
-                  </td>
-                  <td className="py-3 px-4">{dc.metrics.uptime}</td>
-                  <td className="py-3 px-4">{dc.metrics.latency}</td>
-                  <td className="py-3 px-4">{dc.metrics.availability}</td>
-                  <td className="py-3 px-4">
-                    <div className="flex items-center gap-2">
-                      <Progress value={dc.utilization} className="h-2 w-24" />
-                      <span>{dc.utilization}%</span>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </CardContent>
-    </Card>
-  );
-};
-
-const ConnectionsMap = ({ datacenters }: { datacenters: DatacenterProps[] }) => {
-  return (
-    <Card className="col-span-full">
-      <CardHeader>
-        <CardTitle>Datacenter Connections</CardTitle>
-      </CardHeader>
-      <CardContent className="h-[500px] relative flex items-center justify-center">
-        <div className="text-center text-muted-foreground">
-          <Wifi className="h-16 w-16 mx-auto mb-4 opacity-20" />
-          <p>Interactive connections visualization</p>
-          <p className="text-sm">(Network map showing connections between datacenters)</p>
-          <div className="max-w-xl mx-auto mt-8">
-            <h3 className="font-medium mb-2">Connection Summary</h3>
-            <div className="space-y-2">
-              {datacenters.map(dc => (
-                <div key={dc.id} className="p-2 border rounded-md">
-                  <div className="font-medium">{dc.name}</div>
-                  <div className="text-sm text-muted-foreground">Connected to:</div>
-                  <div className="flex flex-wrap gap-2 mt-1">
-                    {dc.connections.map(conn => (
-                      <Badge key={conn.id} variant="outline">{conn.name}</Badge>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
   );
 };
 
