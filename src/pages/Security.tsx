@@ -17,7 +17,7 @@ import {
   Shield as ShieldIcon,
   UserCheck,
   RefreshCw,
-  WifiAlert,
+  Wifi, // Replaced WifiAlert with Wifi
   ShieldAlert,
   FileWarning,
   ShieldQuestion,
@@ -476,14 +476,14 @@ const Security = () => {
                             <div className="text-sm font-medium">Blocked Traffic</div>
                             <div className="text-sm text-red-600 font-medium">5,248 events</div>
                           </div>
-                          <Progress value={22} className="h-2 bg-muted" indicatorClassName="bg-red-600" />
+                          <Progress value={22} className="h-2 bg-muted" />
                         </div>
                         <div>
                           <div className="flex items-center justify-between mb-1">
                             <div className="text-sm font-medium">Allowed Traffic</div>
                             <div className="text-sm text-green-600 font-medium">18,371 events</div>
                           </div>
-                          <Progress value={78} className="h-2 bg-muted" indicatorClassName="bg-green-600" />
+                          <Progress value={78} className="h-2 bg-muted" />
                         </div>
                         
                         <div className="bg-muted/50 rounded-lg p-4 space-y-3 mt-2">
@@ -512,7 +512,7 @@ const Security = () => {
                         <div className="space-y-4">
                           <div className="flex justify-between items-center">
                             <div className="flex items-center gap-2">
-                              <WifiAlert className="h-4 w-4 text-red-500" />
+                              <Wifi className="h-4 w-4 text-red-500" />
                               <span>Brute Force</span>
                             </div>
                             <span className="text-sm font-medium">42%</span>
