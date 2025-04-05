@@ -20,6 +20,7 @@ import Cloud from "./pages/Cloud";
 import DataCenter from "./pages/DataCenter";
 import Locations from "./pages/Locations";
 import Documentation from "./pages/Documentation";
+import Security from "./pages/Security";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -45,6 +46,7 @@ const App = () => (
           <Route path="/documentation" element={<Documentation />} />
           <Route path="/hpc" element={<HPC />} />
           <Route path="/hci" element={<HCI />} />
+          <Route path="/security" element={<Security />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
