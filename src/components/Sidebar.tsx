@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
@@ -10,12 +9,9 @@ import {
   HardDrive,
   Network,
   Server,
-  Settings,
+  Monitor,
   Shield,
   Umbrella,
-  Monitor,
-  Cpu,
-  GitBranch,
   GalleryHorizontal,
   MapPin,
   Book,
@@ -64,9 +60,7 @@ export const Sidebar = ({ collapsed }: SidebarProps) => {
     { title: "Security", icon: Shield, href: "/security" },
   ];
 
-  const bottomLinks: SidebarLink[] = [
-    { title: "Settings", icon: Settings, href: "/settings" },
-  ];
+  const bottomLinks: SidebarLink[] = [];
 
   return (
     <aside
@@ -103,18 +97,7 @@ export const Sidebar = ({ collapsed }: SidebarProps) => {
           </nav>
         </div>
       
-        <div className="border-t border-sidebar-border py-4 px-3 mt-auto absolute bottom-0 left-0 w-full bg-sidebar">
-          <nav className="space-y-1">
-            {bottomLinks.map((link) => (
-              <NavItem 
-                key={link.href} 
-                link={link} 
-                active={location.pathname === link.href}
-                collapsed={collapsed}
-              />
-            ))}
-          </nav>
-        </div>
+        
       </ScrollArea>
     </aside>
   );
