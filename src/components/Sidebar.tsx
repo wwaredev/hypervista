@@ -1,6 +1,7 @@
 
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import Link from "next/link";
+import { useRouter } from "next/router";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
@@ -17,8 +18,8 @@ import {
   MapPin,
   Book,
   Globe,
-  Cpu,  // Added this import
-  GitBranch,  // Added this import
+  Cpu,
+  GitBranch,
 } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
@@ -35,7 +36,7 @@ interface SidebarProps {
 }
 
 export const Sidebar = ({ collapsed }: SidebarProps) => {
-  const location = useLocation();
+  const router = useRouter();
 
   const links: SidebarLink[] = [
     { title: "Dashboard", icon: BarChart2, href: "/" },
@@ -79,7 +80,7 @@ export const Sidebar = ({ collapsed }: SidebarProps) => {
               <div key={link.href}>
                 <NavItem 
                   link={link} 
-                  active={location.pathname === link.href}
+                  active={router.pathname === link.href}
                   collapsed={collapsed}
                 />
                 {!collapsed && link.children && (
@@ -88,7 +89,7 @@ export const Sidebar = ({ collapsed }: SidebarProps) => {
                       <NavItem
                         key={child.href}
                         link={child}
-                        active={location.pathname === child.href}
+                        active={router.pathname === child.href}
                         collapsed={collapsed}
                         isChild
                       />
@@ -99,8 +100,6 @@ export const Sidebar = ({ collapsed }: SidebarProps) => {
             ))}
           </nav>
         </div>
-      
-        
       </ScrollArea>
     </aside>
   );
@@ -121,7 +120,7 @@ const NavItem = ({
   
   const item = (
     <Link
-      to={link.href}
+      href={link.href}
       className={cn(
         "group flex items-center gap-x-3 px-3 py-2 text-sm font-medium rounded-md transition-colors",
         active
