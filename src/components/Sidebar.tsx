@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
@@ -16,6 +17,8 @@ import {
   MapPin,
   Book,
   Globe,
+  Cpu,  // Added this import
+  GitBranch,  // Added this import
 } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
