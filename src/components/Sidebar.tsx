@@ -1,9 +1,7 @@
 
-import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { cn } from "@/lib/utils";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { cn } from "../lib/utils";
 import {
   BarChart2,
   Cloud,
@@ -17,33 +15,20 @@ import {
   GalleryHorizontal,
   MapPin,
   Book,
-  Globe,
   Cpu,
-  GitBranch,
+  GitBranch
 } from "lucide-react";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
-interface SidebarLink {
-  title: string;
-  icon: React.ElementType;
-  href: string;
-  badge?: string;
-  children?: SidebarLink[];
-}
-
-interface SidebarProps {
-  collapsed: boolean;
-}
-
-export const Sidebar = ({ collapsed }: SidebarProps) => {
+// Componente Sidebar
+export const Sidebar = ({ collapsed }) => {
   const router = useRouter();
-
-  const links: SidebarLink[] = [
+  
+  const links = [
     { title: "Dashboard", icon: BarChart2, href: "/" },
-    { 
-      title: "Virtual Machines", 
-      icon: Monitor, 
-      href: "/virtualmachines", 
+    {
+      title: "Virtual Machines",
+      icon: Monitor,
+      href: "/virtualmachines",
       badge: "12",
       children: [
         { title: "All VMs", icon: Monitor, href: "/virtualmachines" },
@@ -61,10 +46,10 @@ export const Sidebar = ({ collapsed }: SidebarProps) => {
     { title: "HPC", icon: Cpu, href: "/hpc" },
     { title: "HCI", icon: GitBranch, href: "/hci" },
     { title: "Documentation", icon: Book, href: "/documentation" },
-    { title: "Security", icon: Shield, href: "/security" },
+    { title: "Security", icon: Shield, href: "/security" }
   ];
 
-  const bottomLinks: SidebarLink[] = [];
+  const bottomLinks = [];
 
   return (
     <aside
@@ -73,13 +58,13 @@ export const Sidebar = ({ collapsed }: SidebarProps) => {
         collapsed ? "w-[4.5rem]" : "w-64"
       )}
     >
-      <ScrollArea className="h-full">
+      <div className="h-full overflow-y-auto">
         <div className="py-4">
           <nav className="space-y-1 px-3">
             {links.map((link) => (
               <div key={link.href}>
-                <NavItem 
-                  link={link} 
+                <NavItem
+                  link={link}
                   active={router.pathname === link.href}
                   collapsed={collapsed}
                 />
@@ -91,7 +76,7 @@ export const Sidebar = ({ collapsed }: SidebarProps) => {
                         link={child}
                         active={router.pathname === child.href}
                         collapsed={collapsed}
-                        isChild
+                        isChild={true}
                       />
                     ))}
                   </div>
@@ -100,32 +85,25 @@ export const Sidebar = ({ collapsed }: SidebarProps) => {
             ))}
           </nav>
         </div>
-      </ScrollArea>
+      </div>
     </aside>
   );
 };
 
-const NavItem = ({ 
-  link, 
-  active, 
+const NavItem = ({
+  link,
+  active,
   collapsed,
   isChild = false
-}: { 
-  link: SidebarLink; 
-  active: boolean;
-  collapsed: boolean;
-  isChild?: boolean;
 }) => {
   const Icon = link.icon;
-  
+
   const item = (
     <Link
       href={link.href}
       className={cn(
         "group flex items-center gap-x-3 px-3 py-2 text-sm font-medium rounded-md transition-colors",
-        active
-          ? "bg-sidebar-primary text-sidebar-primary-foreground"
-          : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+        active ? "bg-sidebar-primary text-sidebar-primary-foreground" : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
         isChild && "text-xs"
       )}
     >
@@ -142,24 +120,14 @@ const NavItem = ({
       )}
     </Link>
   );
-  
+
   if (collapsed) {
     return (
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <div>{item}</div>
-        </TooltipTrigger>
-        <TooltipContent side="right" className="flex items-center gap-2">
-          {link.title}
-          {link.badge && (
-            <span className="inline-block py-0.5 px-2 text-xs rounded-full bg-hyperblue-500/20 text-hyperblue-900">
-              {link.badge}
-            </span>
-          )}
-        </TooltipContent>
-      </Tooltip>
+      <div title={link.title}>
+        {item}
+      </div>
     );
   }
-  
+
   return item;
 };
