@@ -1,7 +1,6 @@
 
 import { useState } from "react";
-import Link from "next/link";
-import { useRouter } from "next/router";
+import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
@@ -36,7 +35,7 @@ interface SidebarProps {
 }
 
 export const Sidebar = ({ collapsed }: SidebarProps) => {
-  const router = useRouter();
+  const location = useLocation();
 
   const links: SidebarLink[] = [
     { title: "Dashboard", icon: BarChart2, href: "/" },
@@ -80,7 +79,7 @@ export const Sidebar = ({ collapsed }: SidebarProps) => {
               <div key={link.href}>
                 <NavItem 
                   link={link} 
-                  active={router.pathname === link.href}
+                  active={location.pathname === link.href}
                   collapsed={collapsed}
                 />
                 {!collapsed && link.children && (
@@ -89,7 +88,7 @@ export const Sidebar = ({ collapsed }: SidebarProps) => {
                       <NavItem
                         key={child.href}
                         link={child}
-                        active={router.pathname === child.href}
+                        active={location.pathname === child.href}
                         collapsed={collapsed}
                         isChild
                       />
@@ -120,7 +119,7 @@ const NavItem = ({
   
   const item = (
     <Link
-      href={link.href}
+      to={link.href}
       className={cn(
         "group flex items-center gap-x-3 px-3 py-2 text-sm font-medium rounded-md transition-colors",
         active
