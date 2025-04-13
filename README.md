@@ -1,69 +1,47 @@
-# Welcome to your Lovable project
+# Bienvenido a **Hypervista**
 
-## Project info
+## 🔗 Información del Proyecto
 
-**URL**: https://lovable.dev/projects/ac0768b5-3531-43ef-ba4c-e1a62cbcbfb8
+- **Repositorio GitHub**: [github.com/wwaredev/hypervista](https://github.com/wwaredev/hypervista)
+- **Proyecto en Lovable**: [lovable.dev/projects/ac0768b5-3531-43ef-ba4c-e1a62cbcbfb8](https://lovable.dev/projects/ac0768b5-3531-43ef-ba4c-e1a62cbcbfb8)
 
-## How can I edit this code?
+---
 
-There are several ways of editing your application.
+## 🧰 Tecnologías Utilizadas
 
-**Use Lovable**
+Este proyecto está construido con:
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/ac0768b5-3531-43ef-ba4c-e1a62cbcbfb8) and start prompting.
+- **Next.js** – Framework de React para aplicaciones web modernas.
+- **Tailwind CSS** – Framework de CSS utilitario para un diseño rápido y eficiente.
+- **Shadcn/ui** – Biblioteca de componentes accesibles y personalizables.
+- **TypeScript** – Superset de JavaScript que añade tipado estático.
 
-Changes made via Lovable will be committed automatically to this repo.
+---
 
-**Use your preferred IDE**
+## 🛠️ ¿Cómo editar este código?
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### 🔧 Usar Lovable
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+Accede a tu [proyecto en Lovable](https://lovable.dev/projects/ac0768b5-3531-43ef-ba4c-e1a62cbcbfb8) y comienza a realizar cambios mediante prompts.  
+Los cambios realizados se sincronizarán automáticamente con este repositorio.
 
-Follow these steps:
+---
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+### 💻 Usar tu IDE preferido
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+Si prefieres trabajar localmente, sigue estos pasos:
 
-# Step 3: Install the necessary dependencies.
-npm i
+```bash
+# 1. Clona el repositorio
+git clone https://github.com/wwaredev/hypervista.git
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# 2. Navega al directorio del proyecto
+cd hypervista
+
+# 3. Instala las dependencias
+npm install
+
+# 4. Inicia el servidor de desarrollo
 npm run dev
-```
 
-**Edit a file directly in GitHub**
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with .
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/ac0768b5-3531-43ef-ba4c-e1a62cbcbfb8) and click on Share -> Publish.
-
-## I want to use a custom domain - is that possible?
-
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
