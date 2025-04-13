@@ -1,5 +1,5 @@
 
-import Gallery from '@/pages/Gallery';
+import Gallery from '../components/Gallery';
 
 export default function GalleryPage() {
   return <Gallery />;

@@ -1,5 +1,5 @@
 
-import Storage from '@/pages/Storage';
+import Storage from '../components/Storage';
 
 export default function StoragePage() {
   return <Storage />;

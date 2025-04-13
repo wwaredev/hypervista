@@ -1,5 +1,5 @@
 
-import Documentation from '@/pages/Documentation';
+import Documentation from '../components/Documentation';
 
 export default function DocumentationPage() {
   return <Documentation />;

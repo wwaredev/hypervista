@@ -1,5 +1,5 @@
 
-import Cluster from '@/pages/Cluster';
+import Cluster from '../components/Cluster';
 
 export default function ClusterPage() {
   return <Cluster />;

@@ -1,5 +1,5 @@
 
-import VirtualMachines from '@/pages/VirtualMachines';
+import VirtualMachines from '../components/VirtualMachines';
 
 export default function VirtualMachinesPage() {
   return <VirtualMachines />;
