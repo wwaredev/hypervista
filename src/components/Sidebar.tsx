@@ -1,6 +1,5 @@
 
-import Link from "next/link";
-import { useRouter } from "next/router";
+import { Link, useLocation } from "react-router-dom";
 import { cn } from "../lib/utils";
 import {
   BarChart2,
@@ -21,7 +20,7 @@ import {
 
 // Componente Sidebar
 export const Sidebar = ({ collapsed }) => {
-  const router = useRouter();
+  const location = useLocation();
   
   const links = [
     { title: "Dashboard", icon: BarChart2, href: "/" },
@@ -65,7 +64,7 @@ export const Sidebar = ({ collapsed }) => {
               <div key={link.href}>
                 <NavItem
                   link={link}
-                  active={router.pathname === link.href}
+                  active={location.pathname === link.href}
                   collapsed={collapsed}
                 />
                 {!collapsed && link.children && (
@@ -74,7 +73,7 @@ export const Sidebar = ({ collapsed }) => {
                       <NavItem
                         key={child.href}
                         link={child}
-                        active={router.pathname === child.href}
+                        active={location.pathname === child.href}
                         collapsed={collapsed}
                         isChild={true}
                       />
@@ -100,7 +99,7 @@ const NavItem = ({
 
   const item = (
     <Link
-      href={link.href}
+      to={link.href}
       className={cn(
         "group flex items-center gap-x-3 px-3 py-2 text-sm font-medium rounded-md transition-colors",
         active ? "bg-sidebar-primary text-sidebar-primary-foreground" : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
