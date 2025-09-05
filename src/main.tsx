@@ -25,6 +25,7 @@ import Documentation from './components/Documentation'
 import Security from './components/Security'
 import VResources from './components/VResources'
 import NotFound from './components/NotFound'
+import { Layout } from './components/Layout'
 
 const queryClient = new QueryClient()
 
@@ -35,21 +36,21 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
-            <Route path="/virtualmachines" element={<VirtualMachines />} />
-            <Route path="/storage" element={<Storage />} />
-            <Route path="/networking" element={<Networking />} />
-            <Route path="/cluster" element={<Cluster />} />
-            <Route path="/gallery" element={<Gallery />} />
-            <Route path="/backup" element={<Backup />} />
-            <Route path="/datacenter" element={<DataCenter />} />
-            <Route path="/locations" element={<Locations />} />
-            <Route path="/cloud" element={<Cloud />} />
-            <Route path="/hpc" element={<HPC />} />
-            <Route path="/hci" element={<HCI />} />
-            <Route path="/documentation" element={<Documentation />} />
-            <Route path="/security" element={<Security />} />
-            <Route path="/vresources" element={<VResources />} />
-            <Route path="*" element={<NotFound />} />
+            <Route path="/virtualmachines" element={<Layout><VirtualMachines /></Layout>} />
+            <Route path="/storage" element={<Layout><Storage /></Layout>} />
+            <Route path="/networking" element={<Layout><Networking /></Layout>} />
+            <Route path="/cluster" element={<Layout><Cluster /></Layout>} />
+            <Route path="/gallery" element={<Layout><Gallery /></Layout>} />
+            <Route path="/backup" element={<Layout><Backup /></Layout>} />
+            <Route path="/datacenter" element={<Layout><DataCenter /></Layout>} />
+            <Route path="/locations" element={<Layout><Locations /></Layout>} />
+            <Route path="/cloud" element={<Layout><Cloud /></Layout>} />
+            <Route path="/hpc" element={<Layout><HPC /></Layout>} />
+            <Route path="/hci" element={<Layout><HCI /></Layout>} />
+            <Route path="/documentation" element={<Layout><Documentation /></Layout>} />
+            <Route path="/security" element={<Layout><Security /></Layout>} />
+            <Route path="/vresources" element={<Layout><VResources /></Layout>} />
+            <Route path="*" element={<Layout><NotFound /></Layout>} />
           </Routes>
         </BrowserRouter>
         <Toaster />
